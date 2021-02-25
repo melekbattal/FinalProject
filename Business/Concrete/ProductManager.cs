@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
@@ -21,17 +22,24 @@ namespace Business.Concrete
 
         public IResult Add(Product product)
         {
+            if (product.ProductName.Length<2)
+            {
+                return new ErrorResult(Messages.ProductNameInvalid);
+            }
+           
             _productDal.Add(product);
 
-            return new Result(true,"ürün eklendi");
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public List<Product> GetAll()
+        IDataResult<List<Product>> IProductService.GetAll()
         {
-            //iş kodları 
-            //yetkisi var mı?
+            if (DateTime.Now.Hour==22)
+            {
+                return new ErrorDataResult();
+            }
 
-            return _productDal.GetAll();           
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),true,"ürünler listelendi");           
            
         }
 
@@ -55,7 +63,37 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
+        Core.Utilities.Results.IDataResult IProductService.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<List<Product>> IProductService.GetAllByCategoryId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<Product> IProductService.GetById(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<List<Product>> IProductService.GetByUnitPrice(decimal min, decimal max)
+        {
+            throw new NotImplementedException();
+        }
+
         List<ProductDetailDto> IProductService.GetProductDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        IDataResult<List<ProductDetailDto>> IProductService.GetProductDetails()
         {
             throw new NotImplementedException();
         }
