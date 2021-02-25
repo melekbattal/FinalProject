@@ -36,66 +36,39 @@ namespace Business.Concrete
         {
             if (DateTime.Now.Hour==22)
             {
-                return new ErrorDataResult();
+                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
 
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),true,"ürünler listelendi");           
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),Messages.ProductsListed);           
            
         }
 
-        public List<Product> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>>  GetAllByCategoryId(int id)
         {
-            return _productDal.GetAll(p => p.CategoryId == id);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
         }
 
-        public Product GetById(int productId)
+        IDataResult<Product>GetById(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public List<Product> GetByUnitPrice(decimal min, decimal max)
+        public SuccessDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
-            return _productDal.GetAll(p => p.UnitPrice <= min &&  p.UnitPrice <= max);
-        }
-
-        public List<ProductDetailDto> GetProductDetails()
-        {
-            throw new NotImplementedException();
-        }
-
-        Core.Utilities.Results.IDataResult IProductService.GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        
-        {
-            throw new NotImplementedException();
-        }
-
-        IDataResult<List<Product>> IProductService.GetAllByCategoryId(int id)
-        {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice <= min &&  p.UnitPrice <= max));
         }
 
         IDataResult<Product> IProductService.GetById(int productId)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
         }
 
-        IDataResult<List<Product>> IProductService.GetByUnitPrice(decimal min, decimal max)
+        public SuccessDataResult<List<ProductDetailDto>> GetProductDetails()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
 
-        List<ProductDetailDto> IProductService.GetProductDetails()
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        IDataResult<List<ProductDetailDto>> IProductService.GetProductDetails()
-        {
-            throw new NotImplementedException();
-        }
-    }
+        
 }
